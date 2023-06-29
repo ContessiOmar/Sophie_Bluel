@@ -1,180 +1,91 @@
-/**
- * Tableau de declaration d'appartenance des projets.
- * @type {Array}
- */
-const gallery = [
-    {
-        "id": 1,
-        "title": "Abajour Tahina",
-        "imageUrl": "http://localhost:5678/images/abajour-tahina1651286843956.png",
-        "categoryId": 1,
-        "userId": 1,
-        "category": {
-            "id": 1,
-            "name": "Objets"
-        }
-    },
-    {
-        "id": 2,
-        "title": "Appartement Paris V",
-        "imageUrl": "http://localhost:5678/images/appartement-paris-v1651287270508.png",
-        "categoryId": 2,
-        "userId": 1,
-        "category": {
-            "id": 2,
-            "name": "Appartements"
-        }
-    },
-    {
-        "id": 3,
-        "title": "Restaurant Sushisen - Londres",
-        "imageUrl": "http://localhost:5678/images/restaurant-sushisen-londres1651287319271.png",
-        "categoryId": 3,
-        "userId": 1,
-        "category": {
-            "id": 3,
-            "name": "Hotels & restaurants"
-        }
-    },
-    {
-        "id": 4,
-        "title": "Villa “La Balisiere” - Port Louis",
-        "imageUrl": "http://localhost:5678/images/la-balisiere1651287350102.png",
-        "categoryId": 2,
-        "userId": 1,
-        "category": {
-            "id": 2,
-            "name": "Appartements"
-        }
-    },
-    {
-        "id": 5,
-        "title": "Structures Thermopolis",
-        "imageUrl": "http://localhost:5678/images/structures-thermopolis1651287380258.png",
-        "categoryId": 1,
-        "userId": 1,
-        "category": {
-            "id": 1,
-            "name": "Objets"
-        }
-    },
-    {
-        "id": 6,
-        "title": "Appartement Paris X",
-        "imageUrl": "http://localhost:5678/images/appartement-paris-x1651287435459.png",
-        "categoryId": 2,
-        "userId": 1,
-        "category": {
-            "id": 2,
-            "name": "Appartements"
-        }
-    },
-    {
-        "id": 7,
-        "title": "Pavillon “Le coteau” - Cassis",
-        "imageUrl": "http://localhost:5678/images/le-coteau-cassis1651287469876.png",
-        "categoryId": 2,
-        "userId": 1,
-        "category": {
-            "id": 2,
-            "name": "Appartements"
-        }
-    },
-    {
-        "id": 8,
-        "title": "Villa Ferneze - Isola d’Elba",
-        "imageUrl": "http://localhost:5678/images/villa-ferneze1651287511604.png",
-        "categoryId": 2,
-        "userId": 1,
-        "category": {
-            "id": 2,
-            "name": "Appartements"
-        }
-    },
-    {
-        "id": 9,
-        "title": "Appartement Paris XVIII",
-        "imageUrl": "http://localhost:5678/images/appartement-paris-xviii1651287541053.png",
-        "categoryId": 2,
-        "userId": 1,
-        "category": {
-            "id": 2,
-            "name": "Appartements"
-        }
-    },
-    {
-        "id": 10,
-        "title": "Bar “Lullaby” - Paris",
-        "imageUrl": "http://localhost:5678/images/bar-lullaby-paris1651287567130.png",
-        "categoryId": 3,
-        "userId": 1,
-        "category": {
-            "id": 3,
-            "name": "Hotels & restaurants"
-        }
-    },
-    {
-        "id": 11,
-        "title": "Hotel First Arte - New Delhi",
-        "imageUrl": "http://localhost:5678/images/hotel-first-arte-new-delhi1651287605585.png",
-        "categoryId": 3,
-        "userId": 1,
-        "category": {
-            "id": 3,
-            "name": "Hotels & restaurants"
-        }
-    }
-]
+fetch('http://localhost:5678/api/works', {  // Récupère les données depuis l'API
+  headers: {  // Entêtes de la requête
+    'Accept': 'application/json'  // Accepte les réponses au format JSON
+  }
+})
+  .then(response => response.json())  // Convertit la réponse en JSON
+  .then(data => {
+    const données = data;  // Récupère les données
+    const galleryElement = document.querySelector('.gallery');  // Sélectionne l'élément de la galerie
 
-// Tableau déclarant les catégories
-const categories = [
-    { "id": 0, "name": "tous" },
-    { "id": 1, "name": "objets" },
-    { "id": 2, "name": "appartements" },
-    { "id": 3, "name": "hotel & restaurants" }
-]; 
+    données.forEach(donnée => {
+      const imageUrl = donnée.imageUrl;
+
+      // Crée un élément image
+      const imageElement = document.createElement('img');
+      imageElement.src = imageUrl;
+
+      // Ajoute l'image à la galerie
+      galleryElement.appendChild(imageElement);
+    });
+  })
+  .catch(error => {
+    console.error(error);
+  });
 
 
-// Sélectionner l'array
-const galleryDiv = document.querySelector('.gallery');
+const galleryDiv = document.querySelector('.gallery');  // Sélectionne le div de la galerie
+const buttonsDiv = document.querySelector('.filter-buttons');  // Sélectionne le div des boutons de filtre
 
-// Conteneur pour les boutons de filtre
-const buttonsDiv = document.createElement('div');
-buttonsDiv.classList.add('filter-buttons');
+function createFilterButtons(categories) {
+  const showAllButton = document.createElement('button');
+  showAllButton.textContent = 'Tous';  // Texte du bouton "Tous"
+  showAllButton.addEventListener('click', function() {
+    filterImages(0);  // Affiche toutes les images (categoryId = 0)
+  });
+  buttonsDiv.appendChild(showAllButton);  // Ajoute le bouton "Tous" au div des boutons de filtre
 
-// Creation boutons de filtre pour chaque catégorie
-categories.forEach(category => {
+  categories.forEach(category => {
     const button = document.createElement('button');
-    button.textContent = category.name;
+    button.textContent = category.name;  // Texte du bouton de la catégorie
 
-     // Ajouter un evénements au clic du bouton
     button.addEventListener('click', function () {
-        filterImages(category.id);
+      filterImages(category.id);  // Filtre les images en fonction de l'ID de la catégorie
     });
 
-    // Ajouter le bouton
-    buttonsDiv.appendChild(button);
-});
+    buttonsDiv.appendChild(button);  // Ajoute le bouton au div des boutons de filtre
+  });
+}
 
-// Insérer le conteneur des boutons avant la galerie
-const portfolioSection = document.getElementById('portfolio');
-portfolioSection.insertBefore(buttonsDiv, galleryDiv);
-portfolioSection.appendChild(galleryDiv);
-
-// Fonction pour filtrer les images
 function filterImages(categoryId) {
-    const images = gallery.filter(image => image.categoryId === categoryId || categoryId === 0);
+  fetch('http://localhost:5678/api/works', {
+    headers: {  // Entêtes de la requête
+      'Accept': 'application/json'  // Accepte les réponses au format JSON
+    }
+  })
+    .then(response => response.json())  // Convertit la réponse en JSON
+    .then(data => {
+      const images = data;  // Récupère les images depuis les données
+      const filteredImages = images.filter(image => image.categoryId === categoryId || categoryId === 0);  // Filtre les images en fonction de l'ID de la catégorie
 
-     // Vider la galerie
-    galleryDiv.innerHTML = '';
+      galleryDiv.innerHTML = '';  // Vide la galerie
 
-      // Ajouter les images filtrées à la galerie
-    images.forEach(image => {
+      filteredImages.forEach(image => {
         const img = document.createElement('img');
         img.src = image.imageUrl;
         img.alt = image.title;
-        galleryDiv.appendChild(img);
+
+        galleryDiv.appendChild(img);  // Ajoute les images filtrées à la galerie
+      });
+    })
+    .catch(error => {
+      console.error(error);
     });
 }
 
+fetch('http://localhost:5678/api/categories', {
+  headers: {  // Entêtes de la requête
+    'Accept': 'application/json'  // Accepte les réponses au format JSON
+  }
+})
+  .then(response => response.json())  // Convertit la réponse en JSON
+  .then(data => {
+    const categories = data;  // Récupère les catégories depuis les données
 
+    createFilterButtons(categories);  // Crée les boutons de filtre en fonction des catégories
+
+    filterImages(0);  // Applique le filtre initial pour afficher toutes les images
+  })
+  .catch(error => {
+    console.error(error);
+  });
