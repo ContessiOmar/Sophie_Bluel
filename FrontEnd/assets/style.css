@@ -185,3 +185,59 @@ footer nav ul {
 	justify-content: flex-end;
 	margin: 2em
 }
+  
+/*******/
+
+.hidden {
+	
+	
+}
+
+.filter-buttons {
+	display: flex;
+	justify-content: center;
+	margin-bottom: 4%;
+}
+
+.filter-buttons button {
+	font-family: 'Syne';
+	font-weight: 700;
+	height: 40px;
+	color: #1D6154;
+	border: 1px solid #1D6154;
+	background-color: white;
+	width: 170px;
+	text-align: center;
+	border-radius: 60px;
+	margin: 1px;
+}
+
+.icon i {
+	display: flex;
+	justify-content: center;
+}
+
+.modal {
+	display: none;
+	position: fixed;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
+	width: 30%;
+	height: 380px;
+	overflow: auto;
+	background-color: lightgrey;
+	margin: auto;
+	padding: 20px;
+	border: 1px solid #888;
+  }
+
+  .modal img {
+	width: 10%;
+
+}
+  
+  
+  
+  
+  
