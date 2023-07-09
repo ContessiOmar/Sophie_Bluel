@@ -55,8 +55,7 @@ function createFilterButtons(categories) {
  * 
  */
 
-//const iconDiv = document.querySelector('.icon');
-let userToken = localStorage.getItem('userToken');
+let userToken = sessionStorage.getItem('userToken');
 
 
 function setConnectedMode() {
@@ -78,11 +77,25 @@ function setConnectedMode() {
 
     iconElement.addEventListener('click', function () {
         const modal = document.createElement('div');
-        modal.classList.add('modal'); 
+        modal.classList.add('modal');
         modal.id = 'modal';
         document.body.appendChild(modal);
 
         const galleryImages = document.querySelectorAll('.gallery img');
+
+        const buttonContainer = document.createElement('div');
+        buttonContainer.classList.add('buttonContainer');
+
+        const btnAddPic = document.createElement('button');
+        btnAddPic.textContent = 'Ajouter une photo';
+        buttonContainer.appendChild(btnAddPic);
+
+        const btnDltPic = document.createElement('button');
+        btnDltPic.textContent = 'Supprimer une photo';
+        buttonContainer.appendChild(btnDltPic);
+        
+        modal.appendChild(buttonContainer);
+        buttonContainer.classList.add('button-container');
 
         galleryImages.forEach(image => {
             const modalImage = document.createElement('img');
@@ -101,49 +114,49 @@ function setConnectedMode() {
         });
 
     });
-
 }
 
-function setDisconnectedMode(categories) {
-    const sectionPortfolio = document.getElementById('portfolio');
-    const filterDiv = document.createElement('div');
-    filterDiv.classList.add('filter-buttons');
-    sectionPortfolio.appendChild(filterDiv);
-    const galleryDiv = document.createElement('div');
-    galleryDiv.classList.add('gallery');
-    sectionPortfolio.appendChild(galleryDiv);
-    createFilterButtons(categories);
-}
+    //
 
-fetch('http://localhost:5678/api/categories', {
-    headers: {  // Entêtes de la requête
-        'Accept': 'application/json'  // Accepte les réponses au format JSON
+    function setDisconnectedMode(categories) {
+        const sectionPortfolio = document.getElementById('portfolio');
+        const filterDiv = document.createElement('div');
+        filterDiv.classList.add('filter-buttons');
+        sectionPortfolio.appendChild(filterDiv);
+        const galleryDiv = document.createElement('div');
+        galleryDiv.classList.add('gallery');
+        sectionPortfolio.appendChild(galleryDiv);
+        createFilterButtons(categories);
     }
-})
-    .then(response => response.json())  // Convertit la réponse en JSON
-    .then(data => {
-        const categories = data;  // Récupère les catégories depuis les données
-        if (userToken) {
-            console.log('token!!!!!!!!!!')
-            setConnectedMode();
 
+    fetch('http://localhost:5678/api/categories', {
+        headers: {  // Entêtes de la requête
+            'Accept': 'application/json'  // Accepte les réponses au format JSON
         }
-        else {
-            console.log('pas de token---------')
-            setDisconnectedMode(categories);
-            // Crée les boutons de filtre si l'utilisateur n'est pas connecté
-        }
-        galleryImages(0);  // Applique le filtre initial pour afficher toutes les images
     })
-    .catch(error => {
-        console.error(error);
-    });
+        .then(response => response.json())  // Convertit la réponse en JSON
+        .then(data => {
+            const categories = data;  // Récupère les catégories depuis les données
+            if (userToken) {
+                console.log('token!!!!!!!!!!')
+                setConnectedMode();
+            }
+            else {
+                console.log('pas de token---------')
+                setDisconnectedMode(categories);
+                // Crée les boutons de filtre si l'utilisateur n'est pas connecté
+            }
+            galleryImages(0);  // Applique le filtre initial pour afficher toutes les images
+        })
+        .catch(error => {
+            console.error(error);
+        });
 
 
 
 
 
-/**
- * <font-awesome-icon icon="fa-light fa-pen-to-square" />
- */
+
+
+
 

@@ -23,7 +23,7 @@ function getAllCredentials() {
             console.log(data);
             // Vérifie si un token est renvoyé dans la réponse
             if (data.token) {
-                localStorage.setItem('userToken', data.token);
+                sessionStorage.setItem('userToken', data.token);
 
                 // Redirige l'utilisateur vers la page principale
                 window.location.href = 'index.html';
