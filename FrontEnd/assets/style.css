@@ -356,6 +356,13 @@ footer nav ul {
 	transform: translateY(45em);
 }
 
+.add-pic-modal {
+	display: block;
+	height: 300px;
+	width: 300px;
+	background: red;
+	transform: translate(30em, -165em);
+}
 
 
 
