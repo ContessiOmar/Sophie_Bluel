@@ -125,11 +125,11 @@ function setConnectedMode() {
             const categoryInput = document.createElement('input');
             categoryInput.type = 'text';
             categoryInput.name = 'category';
-            categoryInput.placeholder = 'Categoria dell\'immagine';
+            categoryInput.placeholder = 'Categories';
             categoryForm.appendChild(categoryInput);
 
             const submitButton = document.createElement('button');
-            submitButton.textContent = 'Carica foto';
+            submitButton.textContent = 'ajouter une photo';
             formContainer.appendChild(submitButton);
 
             const galleryDiv = document.createElement('div');
@@ -157,6 +157,31 @@ function setConnectedMode() {
 
             addPicModal.style.display = 'block';
         });
+    });
+}
+
+/** 
+ * Ici on va créer les boutons et les filtres pour gerer les differents projets
+*/
+
+function createFilterButtons(categories) {
+    const buttonsDiv = document.querySelector('.filter-buttons');
+    const showAllButton = document.createElement('button');
+    showAllButton.textContent = 'Tous';  // Texte du bouton "Tous"
+    showAllButton.addEventListener('click', function () {
+        galleryImages(0);  // Affiche toutes les images (categoryId = 0)
+    });
+    buttonsDiv.appendChild(showAllButton);  // Ajoute le bouton "Tous" au div des boutons de filtre
+
+    categories.forEach(category => {
+        const button = document.createElement('button');
+        button.textContent = category.name;  // Texte du bouton de la catégorie
+
+        button.addEventListener('click', function () {
+            galleryImages(category.id);  // Filtre les images en fonction de l'ID de la catégorie
+        });
+
+        buttonsDiv.appendChild(button);  // Ajoute le bouton au div des boutons de filtre
     });
 }
 /**
@@ -194,7 +219,6 @@ fetch('http://localhost:5678/api/categories', {
     .catch(error => {
         console.error(error);
     });
-
 
 
 
