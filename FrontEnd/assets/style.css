@@ -172,7 +172,7 @@ h2 {
 	font-family: 'Syne';
 	font-weight: 700;
 	font-size: 30px;
-	color: #1D6154
+	color: #1D6154;
 }
 
 nav ul {
@@ -342,11 +342,15 @@ footer nav ul {
 	background: rgba(0, 0, 0, 0.5);
 }
 
+.modal .image-container {
+	display: inline-block;
+	width: 33%;
+}
+
 .modal img {
-	justify-content: center;
-	width: 77px;
-	height: 102px;
-	margin: 10px 7px 10px;
+	margin: 10px 8px 10px;
+	width: 70%;
+	height: 154px;
 }
 
 .modal .button-container {
@@ -356,13 +360,68 @@ footer nav ul {
 	transform: translateY(45em);
 }
 
+.delete-icon {
+	color: white;
+	background: black;
+	transform: translate(-33px, -144px);
+	text-align: center;
+	width: 20px;
+	height: 20px;
+	line-height: 24px;
+}
+
+.button-container button {
+	display: flex;
+    justify-content: center;
+    border-radius: 20px;
+    width: 30%;
+    align-self: center;
+    height: 35px;
+    align-items: center;
+	color: white;
+	background: #1D6154;
+	border: none;
+}
+
+.button-container button:last-child {
+	background: white;
+	color: red;
+}
+
+/***MODAL 2***/
+
 .add-pic-modal {
 	display: block;
-	height: 300px;
-	width: 300px;
-	background: red;
+	height: 670px;
+	width: 630px;
+	background: white;
 	transform: translate(30em, -165em);
 }
 
+.add-pic-modal .form-container {
+	text-align: center;
+	margin-top: 33%;
+}
+
+.image-form {
+	justify-content: center;
+}
+
+.image-form input {
+	width: 76%;
+	border-radius: 20px;
+	height: 120px;
+	background: #E8F1F6
+}
+
+.title-form input {
+	height: 46px;
+	width: 61%;
+}
+
+.category-form input {
+	height: 46px;
+	width: 61%;
+}
 
 

@@ -39,8 +39,8 @@ function setConnectedMode() {
     iconDiv.classList.add('icon');
 
     const iconElement = document.createElement('i');
-    iconElement.classList.add("fa-light");
-    iconElement.classList.add("fa-pen-to-square");
+    iconElement.classList.add('fa-solid');
+    iconElement.classList.add('fa-pen-to-square');
 
     const divModal = document.createElement('div');
     divModal.classList.add('modal');
@@ -66,21 +66,63 @@ function setConnectedMode() {
         const btnAddPic = document.createElement('button');
         btnAddPic.textContent = 'Ajouter une photo';
         buttonContainer.appendChild(btnAddPic);
-        // Bouton x supprimer une photo
+        // Bouton x supprimer tout la galerie.
         const btnDltPic = document.createElement('button');
-        btnDltPic.textContent = 'Supprimer une photo';
+        btnDltPic.textContent = 'Supprimer la galerie';
         buttonContainer.appendChild(btnDltPic);
         modal.appendChild(buttonContainer);
         buttonContainer.classList.add('button-container');
         // Affichage des images dans la modal
-        galleryImages.forEach(image => {
+        galleryImages.forEach((image) => {
+
+            const container = document.createElement('div');
+            container.classList.add('image-container');
+            
             const modalImage = document.createElement('img');
             modalImage.src = image.src;
             modalImage.alt = image.alt;
-            modal.appendChild(modalImage);
+            container.appendChild(modalImage);
+            // Supprimer une image
+            const deleteIconDiv = document.createElement('div');
+            deleteIconDiv.classList.add('icon');
+
+            const deleteIcon = document.createElement('i');
+            deleteIcon.classList.add('fa-solid');
+            deleteIcon.classList.add('fa-trash');
+            deleteIcon.classList.add('delete-icon');
+            modalImage.parentElement.appendChild(deleteIcon);
+
+            const description = document.createElement('p');
+            description.textContent = 'éditer';
+            modalImage.parentElement.appendChild(description);
+
+            modal.appendChild(container);
+            // Écouteur d'événement pour la suppression de l'image
+            deleteIcon.addEventListener('click', function () {
+                // Requête DELETE à l'API
+                fetch(`http://localhost:5678/api/works/$(id)`, {
+                    method: 'DELETE',
+                    headers: {
+                        Authorization: 'Bearer $(userToken)'
+                    },
+                })
+                    .then((response) => {
+                        if (response.ok) {
+                            // Supprimer l'image de la modal
+                            modalImage.remove();
+                            deleteIcon.remove();
+                        } else {
+                            console.error('Erreur lors de la requête DELETE');
+                        }
+                    })
+                    .catch((error) => {
+                        console.error('Erreur de connexion ou de requête fetch', error);
+                    });
+            });
         });
+
         modal.style.display = 'block';
-        // Ouverture de la 2éme modal pour ajouter une photo
+        // Ouverture de la 2ème modal pour ajouter une photo
         btnAddPic.addEventListener('click', function openAddPicModal() {
             if (previousModal) {
                 previousModal.remove();
@@ -115,7 +157,7 @@ function setConnectedMode() {
             const titleInput = document.createElement('input');
             titleInput.type = 'text';
             titleInput.name = 'title';
-            titleInput.placeholder = 'Titolo dell\'immagine';
+            titleInput.placeholder = 'Title';
             titleForm.appendChild(titleInput);
 
             const categoryForm = document.createElement('form');
@@ -159,6 +201,8 @@ function setConnectedMode() {
         });
     });
 }
+
+
 
 /** 
  * Ici on va créer les boutons et les filtres pour gerer les differents projets
