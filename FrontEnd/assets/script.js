@@ -29,7 +29,6 @@ function galleryImages(categoryId) {
 
 let userToken = sessionStorage.getItem('userToken');
 let previousModal = null;
-
 /**
  * Ici on configure le mode connecté
  */
@@ -41,6 +40,12 @@ function setConnectedMode() {
     const iconElement = document.createElement('i');
     iconElement.classList.add('fa-solid');
     iconElement.classList.add('fa-pen-to-square');
+
+    const iconText = document.createElement('p');
+    iconText.textContent = 'modifier';
+    iconDiv.appendChild(iconElement);
+    iconDiv.appendChild(iconText);
+
 
     const divModal = document.createElement('div');
     divModal.classList.add('modal');
@@ -68,7 +73,6 @@ function setConnectedMode() {
         closeIcon.classList.add('fa-times');
         closeIconDiv.appendChild(closeIcon);
         modal.appendChild(closeIconDiv);
-
         closeIconDiv.addEventListener('click', function () {
             modal.style.display = 'none';
         });
@@ -84,7 +88,6 @@ function setConnectedMode() {
         modalTitle.appendChild(heading);
         modal.insertBefore(modalTitle, modal.firstChild);
 
-
         // Bouton d'ajout d'une photo
         const btnAddPic = document.createElement('button');
         btnAddPic.textContent = 'Ajouter une photo';
@@ -96,6 +99,7 @@ function setConnectedMode() {
         modal.appendChild(buttonContainer);
         buttonContainer.classList.add('button-container');
 
+        // div pour englober chaque projet dans la modal
         const projectGallery = document.createElement('div');
         projectGallery.classList.add('project-gallery');
 
@@ -111,13 +115,12 @@ function setConnectedMode() {
             // Supprimer une image
             const deleteIconDiv = document.createElement('div');
             deleteIconDiv.classList.add('icon');
-
             const deleteIcon = document.createElement('i');
             deleteIcon.classList.add('fa-solid');
             deleteIcon.classList.add('fa-trash');
             deleteIcon.classList.add('delete-icon');
             modalImage.parentElement.appendChild(deleteIcon);
-
+            //
             const description = document.createElement('p');
             description.textContent = 'éditer';
             modalImage.parentElement.appendChild(description);
@@ -151,10 +154,9 @@ function setConnectedMode() {
         // Ajout du projectGallery à la modal
         modal.appendChild(projectGallery);
 
+        // ligne entre les projets et les boutons
         const separator = document.createElement('hr');
         separator.classList.add('hr');
-
-        // Inserimento dell'elemento di separazione nella modal
         modal.appendChild(separator);
 
         modal.style.display = 'flex';
@@ -178,15 +180,51 @@ function setConnectedMode() {
             formContainer.classList.add('form-container');
             addPicModal.appendChild(formContainer);
 
+            // Ici on selectionne l'image
+
             const imageForm = document.createElement('form');
             imageForm.classList.add('image-form');
             formContainer.appendChild(imageForm);
 
+            const inputContainer = document.createElement('div');
+            inputContainer.classList.add('input-container');
+            imageForm.appendChild(inputContainer);
+
+            const photoIcon = document.createElement('i');
+            photoIcon.classList.add('fa-regular', 'fa-image');
+            inputContainer.appendChild(photoIcon);
+
+            const addButton = document.createElement('button');
+            addButton.type = 'button';
+            addButton.classList.add('add-photo-button');
+            addButton.textContent = 'Ajouter une photo';
+            inputContainer.appendChild(addButton);
+
             const imageInput = document.createElement('input');
             imageInput.type = 'file';
             imageInput.name = 'image';
+            imageInput.style.display = 'none';
             imageForm.appendChild(imageInput);
 
+            imageInput.addEventListener('change', function (event) {
+                const selectedFile = event.target.files[0];
+                const imagePreview = document.createElement('img');
+                imagePreview.src = URL.createObjectURL(selectedFile);
+                imagePreview.alt = 'Preview';
+                imagePreview.classList.add('image-preview');
+                inputContainer.appendChild(imagePreview);
+            });
+
+            imageForm.addEventListener('submit', function (event) {
+                event.preventDefault(); // Evita l'invio del form
+            });
+
+
+            addButton.addEventListener('click', function () {
+                imageInput.click();
+            });
+
+            //
             const titleForm = document.createElement('form');
             titleForm.classList.add('title-form');
             formContainer.appendChild(titleForm);
@@ -236,15 +274,11 @@ function setConnectedMode() {
 
             addPicModal.style.display = 'block';
         });
-    });
+    })
 }
-
-
-
 /** 
  * Ici on va créer les boutons et les filtres pour gerer les differents projets
 */
-
 function createFilterButtons(categories) {
     const buttonsDiv = document.querySelector('.filter-buttons');
     const showAllButton = document.createElement('button');
@@ -300,10 +334,6 @@ fetch('http://localhost:5678/api/categories', {
     .catch(error => {
         console.error(error);
     });
-
-
-
-
 
 
 

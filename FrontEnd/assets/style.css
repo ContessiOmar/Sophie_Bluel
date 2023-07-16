@@ -311,10 +311,19 @@ footer nav ul {
 	margin: 1px;
 }
 
-.icon i {
+.icon {
 	display: flex;
-	justify-content: center;
+	flex-direction: column-reverse;
+	font-size: 20px;
+	transform: translate(36em, -3em);
 }
+
+.icon p {
+	width: 7%;
+	margin-left: -21px;
+	margin-top: 5px;
+}
+
 
 /**MODAL**/
 #modal {
@@ -420,11 +429,13 @@ footer nav ul {
 /***MODAL 2***/
 
 .add-pic-modal {
-	display: block;
-	height: 670px;
-	width: 630px;
-	background: white;
-	transform: translate(30em, -165em);
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	width: 600px;
+	height: 730px;
+	background-color: #fffef8;
 }
 
 .add-pic-modal .form-container {
@@ -433,14 +444,43 @@ footer nav ul {
 }
 
 .image-form {
+	display: flex;
 	justify-content: center;
+	flex-direction: column;
+	background-color: #E8F1F6;
+	height: 115px;
 }
 
 .image-form input {
-	width: 76%;
+	display: none;
+}
+
+.image-preview {
+	display: flex;
+	position: absolute;
+	width: 100%;
+	max-width: 179px;
+	height: 8em;
+	object-fit: cover;
+}
+
+.input-container {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+.input-container i {
+	color: #CBD6DC;
+	font-size: 40px;
+}
+
+.input-container button {
+	width: 30%;
+	height: 35px;
 	border-radius: 20px;
-	height: 120px;
-	background: #E8F1F6
+	background: #CBD6DC;
 }
 
 .title-form input {
