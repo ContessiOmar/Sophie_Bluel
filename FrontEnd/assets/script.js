@@ -59,9 +59,32 @@ function setConnectedMode() {
         modal.classList.add('modal');
         modal.id = 'modal';
         document.body.appendChild(modal);
+
+        // Fermeture modal
+        const closeIconDiv = document.createElement('div');
+        closeIconDiv.classList.add('close-icon');
+        const closeIcon = document.createElement('i');
+        closeIcon.classList.add('fa-solid');
+        closeIcon.classList.add('fa-times');
+        closeIconDiv.appendChild(closeIcon);
+        modal.appendChild(closeIconDiv);
+
+        closeIconDiv.addEventListener('click', function () {
+            modal.style.display = 'none';
+        });
         const galleryImages = document.querySelectorAll('.gallery img');
         const buttonContainer = document.createElement('div');
         buttonContainer.classList.add('buttonContainer');
+
+        // Titre de la modal
+        const modalTitle = document.createElement('div');
+        modalTitle.classList.add('modal-title');
+        const heading = document.createElement('h3');
+        heading.textContent = 'Galerie photo';
+        modalTitle.appendChild(heading);
+        modal.insertBefore(modalTitle, modal.firstChild);
+
+
         // Bouton d'ajout d'une photo
         const btnAddPic = document.createElement('button');
         btnAddPic.textContent = 'Ajouter une photo';
@@ -72,12 +95,15 @@ function setConnectedMode() {
         buttonContainer.appendChild(btnDltPic);
         modal.appendChild(buttonContainer);
         buttonContainer.classList.add('button-container');
-        // Affichage des images dans la modal
-        galleryImages.forEach((image) => {
 
+        const projectGallery = document.createElement('div');
+        projectGallery.classList.add('project-gallery');
+
+        // Affichage des images dans  projectGallery
+        galleryImages.forEach((image) => {
             const container = document.createElement('div');
             container.classList.add('image-container');
-            
+
             const modalImage = document.createElement('img');
             modalImage.src = image.src;
             modalImage.alt = image.alt;
@@ -96,7 +122,8 @@ function setConnectedMode() {
             description.textContent = 'éditer';
             modalImage.parentElement.appendChild(description);
 
-            modal.appendChild(container);
+            projectGallery.appendChild(container);
+
             // Écouteur d'événement pour la suppression de l'image
             deleteIcon.addEventListener('click', function () {
                 // Requête DELETE à l'API
@@ -121,7 +148,16 @@ function setConnectedMode() {
             });
         });
 
-        modal.style.display = 'block';
+        // Ajout du projectGallery à la modal
+        modal.appendChild(projectGallery);
+
+        const separator = document.createElement('hr');
+        separator.classList.add('hr');
+
+        // Inserimento dell'elemento di separazione nella modal
+        modal.appendChild(separator);
+
+        modal.style.display = 'flex';
         // Ouverture de la 2ème modal pour ajouter une photo
         btnAddPic.addEventListener('click', function openAddPicModal() {
             if (previousModal) {
@@ -137,6 +173,7 @@ function setConnectedMode() {
             backArrow.addEventListener('click', function () {
                 addPicModal.style.display = 'none';
             });
+
             const formContainer = document.createElement('div');
             formContainer.classList.add('form-container');
             addPicModal.appendChild(formContainer);
