@@ -424,6 +424,7 @@ footer nav ul {
 	position: absolute;
 	top: 10px;
 	right: 10px;
+	font-size: 22px;
   }
 
 /***MODAL 2***/
@@ -434,13 +435,20 @@ footer nav ul {
 	left: 50%;
 	transform: translate(-50%, -50%);
 	width: 600px;
-	height: 730px;
+	height: 650px;
 	background-color: #fffef8;
 }
 
+.add-pic-modal .modal-title {
+	transform: translateY(4em);
+}
+
+.add-pic-modal i {
+	font-size: 22px;
+}
 .add-pic-modal .form-container {
 	text-align: center;
-	margin-top: 33%;
+	margin-top: 20%;
 }
 
 .image-form {
@@ -448,21 +456,13 @@ footer nav ul {
 	justify-content: center;
 	flex-direction: column;
 	background-color: #E8F1F6;
-	height: 115px;
+	height: 200px;
 }
 
 .image-form input {
 	display: none;
 }
 
-.image-preview {
-	display: flex;
-	position: absolute;
-	width: 100%;
-	max-width: 179px;
-	height: 8em;
-	object-fit: cover;
-}
 
 .input-container {
 	display: flex;
@@ -473,22 +473,51 @@ footer nav ul {
 
 .input-container i {
 	color: #CBD6DC;
-	font-size: 40px;
+	font-size: 5em;
 }
 
-.input-container button {
+.input-container .add-photo-button {
 	width: 30%;
 	height: 35px;
 	border-radius: 20px;
 	background: #CBD6DC;
+	margin-top: 3em;
+}
+
+.title-form, .category-form{
+	margin-top: 2em;
+
 }
 
 .title-form input {
 	height: 46px;
 	width: 61%;
+	border: none;
 }
 
-.category-form input {
+.category-form select {
 	height: 46px;
 	width: 61%;
+	border: none;
+}
+
+.image-preview {
+	display: flex;
+	position: absolute;
+	width: 100%;
+	max-width: 200px;
+	height: 14em;
+	object-fit: cover;
+}
+
+.form-container button {
+	margin-top: 0;
+	border-radius: 20px;
+	width: 30%;
+	height: 30px;
+}
+
+.form-container .hr {
+	width: 85%;
+	margin: 3em;
 }

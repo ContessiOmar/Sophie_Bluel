@@ -27,8 +27,70 @@ function galleryImages(categoryId) {
 
 }
 
+/**
+ * Ici on configure le mode déconnecté
+ */
+function setDisconnectedMode(categories) {
+    const sectionPortfolio = document.getElementById('portfolio');
+    const filterDiv = document.createElement('div');
+    filterDiv.classList.add('filter-buttons');
+    sectionPortfolio.appendChild(filterDiv);
+    const galleryDiv = document.createElement('div');
+    galleryDiv.classList.add('gallery');
+    sectionPortfolio.appendChild(galleryDiv);
+    createFilterButtons(categories);
+}
+fetch('http://localhost:5678/api/categories', {
+    headers: {  // Entêtes de la requête
+        'Accept': 'application/json'  // Accepte les réponses au format JSON
+    }
+})
+    .then(response => response.json())  // Converti la réponse en JSON
+    .then(data => {
+        const categories = data;  // Récupère les catégories depuis les données
+        if (userToken) {
+            console.log('token!!!!!!!!!!')
+            setConnectedMode();
+        }
+        else {
+            console.log('pas de token---------')
+            setDisconnectedMode(categories);
+            // Crée les boutons de filtre si l'utilisateur n'est pas connecté
+        }
+        galleryImages(0);  // Applique le filtre initial pour afficher toutes les images
+    })
+    .catch(error => {
+        console.error(error);
+    });
+
+/** 
+* Ici on va créer les boutons et les filtres pour gerer les differents projets
+*/
+function createFilterButtons(categories) {
+    const buttonsDiv = document.querySelector('.filter-buttons');
+    const showAllButton = document.createElement('button');
+    showAllButton.textContent = 'Tous';  // Texte du bouton "Tous"
+    showAllButton.addEventListener('click', function () {
+        galleryImages(0);  // Affiche toutes les images (categoryId = 0)
+    });
+    buttonsDiv.appendChild(showAllButton);  // Ajoute le bouton "Tous" au div des boutons de filtre
+
+    categories.forEach(category => {
+        const button = document.createElement('button');
+        button.textContent = category.name;  // Texte du bouton de la catégorie
+
+        button.addEventListener('click', function () {
+            galleryImages(category.id);  // Filtre les images en fonction de l'ID de la catégorie
+        });
+
+        buttonsDiv.appendChild(button);  // Ajoute le bouton au div des boutons de filtre
+    });
+}
+
+//
+
+
 let userToken = sessionStorage.getItem('userToken');
-let previousModal = null;
 /**
  * Ici on configure le mode connecté
  */
@@ -64,6 +126,8 @@ function setConnectedMode() {
         modal.classList.add('modal');
         modal.id = 'modal';
         document.body.appendChild(modal);
+        document.body.style.backgroundColor = 'rgba(0, 0, 0, 0.3)';
+
 
         // Fermeture modal
         const closeIconDiv = document.createElement('div');
@@ -75,7 +139,9 @@ function setConnectedMode() {
         modal.appendChild(closeIconDiv);
         closeIconDiv.addEventListener('click', function () {
             modal.style.display = 'none';
+            document.body.style.backgroundColor = 'white';
         });
+
         const galleryImages = document.querySelectorAll('.gallery img');
         const buttonContainer = document.createElement('div');
         buttonContainer.classList.add('buttonContainer');
@@ -150,10 +216,8 @@ function setConnectedMode() {
                     });
             });
         });
-
         // Ajout du projectGallery à la modal
         modal.appendChild(projectGallery);
-
         // ligne entre les projets et les boutons
         const separator = document.createElement('hr');
         separator.classList.add('hr');
@@ -162,8 +226,8 @@ function setConnectedMode() {
         modal.style.display = 'flex';
         // Ouverture de la 2ème modal pour ajouter une photo
         btnAddPic.addEventListener('click', function openAddPicModal() {
-            if (previousModal) {
-                previousModal.remove();
+            if (openAddPicModal) {
+                modal.remove();
             }
             const addPicModal = document.createElement('div');
             addPicModal.classList.add('add-pic-modal');
@@ -173,15 +237,36 @@ function setConnectedMode() {
             backArrow.classList.add('fas', 'fa-arrow-left', 'back-arrow');
             addPicModal.appendChild(backArrow);
             backArrow.addEventListener('click', function () {
+                addPicModal.remove();
+               // modal.style.display = 'flex';  (?)
+            });
+           
+
+
+            const addPicModalTitle = document.createElement('div');
+            addPicModalTitle.classList.add('modal-title');
+            const heading = document.createElement('h3');
+            heading.textContent = 'Ajout photo';
+            addPicModalTitle.appendChild(heading);
+            addPicModal.appendChild(addPicModalTitle);
+
+            // Fermeture modal
+            const closeIconDiv = document.createElement('div');
+            closeIconDiv.classList.add('close-icon');
+            const closeIcon = document.createElement('i');
+            closeIcon.classList.add('fa-solid');
+            closeIcon.classList.add('fa-times');
+            closeIconDiv.appendChild(closeIcon);
+            addPicModal.appendChild(closeIconDiv);
+            closeIconDiv.addEventListener('click', function () {
                 addPicModal.style.display = 'none';
+                document.body.style.backgroundColor = 'white';
             });
 
             const formContainer = document.createElement('div');
             formContainer.classList.add('form-container');
             addPicModal.appendChild(formContainer);
-
             // Ici on selectionne l'image
-
             const imageForm = document.createElement('form');
             imageForm.classList.add('image-form');
             formContainer.appendChild(imageForm);
@@ -197,7 +282,7 @@ function setConnectedMode() {
             const addButton = document.createElement('button');
             addButton.type = 'button';
             addButton.classList.add('add-photo-button');
-            addButton.textContent = 'Ajouter une photo';
+            addButton.textContent = '+ Ajouter une photo';
             inputContainer.appendChild(addButton);
 
             const imageInput = document.createElement('input');
@@ -207,8 +292,8 @@ function setConnectedMode() {
             imageForm.appendChild(imageInput);
 
             imageInput.addEventListener('change', function (event) {
-                const selectedFile = event.target.files[0];
-                const imagePreview = document.createElement('img');
+                const selectedFile = event.target.files[0]; // Récupère le fichier choisi
+                const imagePreview = document.createElement('img'); // Crée une preview de l'image
                 imagePreview.src = URL.createObjectURL(selectedFile);
                 imagePreview.alt = 'Preview';
                 imagePreview.classList.add('image-preview');
@@ -216,125 +301,93 @@ function setConnectedMode() {
             });
 
             imageForm.addEventListener('submit', function (event) {
-                event.preventDefault(); // Evita l'invio del form
+                event.preventDefault(); // Empêche le formulaire de se soumettre
             });
 
 
             addButton.addEventListener('click', function () {
                 imageInput.click();
             });
-
-            //
+            // Ici on ajoute un titre pour le nouveau fichier!!
             const titleForm = document.createElement('form');
             titleForm.classList.add('title-form');
             formContainer.appendChild(titleForm);
 
-            const titleInput = document.createElement('input');
+            const titleInput = document.createElement('input'); // Crée un champ de saisie
             titleInput.type = 'text';
             titleInput.name = 'title';
             titleInput.placeholder = 'Title';
             titleForm.appendChild(titleInput);
-
+            // Ici on pourra donner une categorie
             const categoryForm = document.createElement('form');
             categoryForm.classList.add('category-form');
             formContainer.appendChild(categoryForm);
 
-            const categoryInput = document.createElement('input');
-            categoryInput.type = 'text';
-            categoryInput.name = 'category';
-            categoryInput.placeholder = 'Categories';
-            categoryForm.appendChild(categoryInput);
+            const categorySelect = document.createElement('select'); // Crée une liste déroulante pour les catégories
+            categorySelect.name = 'category';
+            categorySelect.placeholder = 'Categories';
+            categoryForm.appendChild(categorySelect);
 
+            const defaultOption = document.createElement('option');
+            defaultOption.text = 'Select a category';
+            defaultOption.disabled = true;
+            defaultOption.selected = true;
+            categorySelect.appendChild(defaultOption);
+
+            fetch('http://localhost:5678/api/categories', {
+                headers: {
+                    Accept: 'application/json'
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    data.forEach(categoryObj => {
+                        const option = document.createElement('option'); // Crée une option pour chaque catégorie
+                        option.value = categoryObj.name;
+                        option.text = categoryObj.name;
+                        categorySelect.appendChild(option);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching categories:', error);
+                });
+
+
+
+            const separator = document.createElement('hr');
+            separator.classList.add('hr');
+            formContainer.appendChild(separator);
+            // Ici on crée le bouton de soumission
             const submitButton = document.createElement('button');
-            submitButton.textContent = 'ajouter une photo';
+            submitButton.textContent = 'valider';
             formContainer.appendChild(submitButton);
 
-            const galleryDiv = document.createElement('div');
+            const galleryDiv = document.createElement('div'); // Crée un conteneur pour la galerie d'images
             galleryDiv.classList.add('gallery');
             sectionPortfolio.appendChild(galleryDiv);
 
             submitButton.addEventListener('click', function () {
-                const selectedImage = imageInput.files[0];
-                const title = titleInput.value;
-                const category = categoryInput.value;
-
+                const selectedImage = imageInput.files[0]; // Récupère l'image 
+                const title = titleInput.value; // Récupère le titre
                 const imageContainer = document.createElement('div');
                 imageContainer.classList.add('gallery-image');
 
                 const galleryImage = document.createElement('img');
                 galleryImage.src = URL.createObjectURL(selectedImage);
                 galleryImage.alt = title;
-
                 imageContainer.appendChild(galleryImage);
 
-                galleryDiv.appendChild(imageContainer);
+                galleryDiv.appendChild(imageContainer); // Ajoute le conteneur de l'image à la galerie
 
                 addPicModal.style.display = 'none';
+
+                addPicModal.style.display = 'block'; // Affiche la modal pour ajouter une photo
             });
 
-            addPicModal.style.display = 'block';
-        });
+        })
     })
+
 }
-/** 
- * Ici on va créer les boutons et les filtres pour gerer les differents projets
-*/
-function createFilterButtons(categories) {
-    const buttonsDiv = document.querySelector('.filter-buttons');
-    const showAllButton = document.createElement('button');
-    showAllButton.textContent = 'Tous';  // Texte du bouton "Tous"
-    showAllButton.addEventListener('click', function () {
-        galleryImages(0);  // Affiche toutes les images (categoryId = 0)
-    });
-    buttonsDiv.appendChild(showAllButton);  // Ajoute le bouton "Tous" au div des boutons de filtre
-
-    categories.forEach(category => {
-        const button = document.createElement('button');
-        button.textContent = category.name;  // Texte du bouton de la catégorie
-
-        button.addEventListener('click', function () {
-            galleryImages(category.id);  // Filtre les images en fonction de l'ID de la catégorie
-        });
-
-        buttonsDiv.appendChild(button);  // Ajoute le bouton au div des boutons de filtre
-    });
-}
-/**
- * Ici on configure le mode déconnecté
- */
-function setDisconnectedMode(categories) {
-    const sectionPortfolio = document.getElementById('portfolio');
-    const filterDiv = document.createElement('div');
-    filterDiv.classList.add('filter-buttons');
-    sectionPortfolio.appendChild(filterDiv);
-    const galleryDiv = document.createElement('div');
-    galleryDiv.classList.add('gallery');
-    sectionPortfolio.appendChild(galleryDiv);
-    createFilterButtons(categories);
-}
-fetch('http://localhost:5678/api/categories', {
-    headers: {  // Entêtes de la requête
-        'Accept': 'application/json'  // Accepte les réponses au format JSON
-    }
-})
-    .then(response => response.json())  // Converti la réponse en JSON
-    .then(data => {
-        const categories = data;  // Récupère les catégories depuis les données
-        if (userToken) {
-            console.log('token!!!!!!!!!!')
-            setConnectedMode();
-        }
-        else {
-            console.log('pas de token---------')
-            setDisconnectedMode(categories);
-            // Crée les boutons de filtre si l'utilisateur n'est pas connecté
-        }
-        galleryImages(0);  // Applique le filtre initial pour afficher toutes les images
-    })
-    .catch(error => {
-        console.error(error);
-    });
-
 
 
 
