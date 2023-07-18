@@ -15,10 +15,20 @@ function galleryImages(categoryId) {
             const galleryDiv = document.querySelector('.gallery');
             galleryDiv.innerHTML = '';  // Vide la galerie
             galleryFilteredImages.forEach(image => {
+
+                const projectContainer = document.createElement('div');
+                projectContainer.classList.add('project-container');
+
                 const img = document.createElement('img');
                 img.src = image.imageUrl;
                 img.alt = image.title;
-                galleryDiv.appendChild(img);  // Ajoute les images filtrées à la galerie
+                projectContainer.appendChild(img);  // Ajoute les images filtrées à la galerie
+
+                const title = document.createElement('p');
+                title.textContent = image.title;
+                projectContainer.appendChild(title);
+
+                galleryDiv.appendChild(projectContainer);
             });
         })
         .catch(error => {
@@ -90,10 +100,12 @@ function createFilterButtons(categories) {
 //
 
 
-let userToken = sessionStorage.getItem('userToken');
+
 /**
  * Ici on configure le mode connecté
  */
+let userToken = sessionStorage.getItem('userToken');
+
 function setConnectedMode() {
     // Création de l'icône et du conteneur de modal
     const iconDiv = document.createElement('div');
@@ -201,10 +213,13 @@ function setConnectedMode() {
             // Écouteur d'événement pour la suppression de l'image
             deleteIcon.addEventListener('click', function () {
                 // Requête DELETE à l'API
-                fetch(`http://localhost:5678/api/works/$(id)`, {
+                const id = image.getAttribute('data-id');
+
+                fetch(`http://localhost:5678/api/works/${id}`, {
                     method: 'DELETE',
                     headers: {
-                        Authorization: 'Bearer $(userToken)'
+
+                        Authorization: 'Bearer $(data.token)'
                     },
                 })
                     .then((response) => {
@@ -233,7 +248,7 @@ function setConnectedMode() {
         /**
          *  MODAL X AJOUT PROJET.
          */
-        
+
         // Ouverture de la 2ème modal pour ajouter une photo
         btnAddPic.addEventListener('click', function openAddPicModal() {
             if (openAddPicModal) {
@@ -321,23 +336,27 @@ function setConnectedMode() {
             titleForm.classList.add('title-form');
             formContainer.appendChild(titleForm);
 
+            const titleSpan = document.createElement('span');
+            titleSpan.textContent = 'Titre';
             const titleInput = document.createElement('input'); // Crée un champ de saisie
             titleInput.type = 'text';
             titleInput.name = 'title';
-            titleInput.placeholder = 'Title';
+
+            titleForm.appendChild(titleSpan);
             titleForm.appendChild(titleInput);
             // Ici on pourra donner une categorie
             const categoryForm = document.createElement('form');
             categoryForm.classList.add('category-form');
             formContainer.appendChild(categoryForm);
 
+            const categorySpan = document.createElement('span');
+            categorySpan.textContent = 'Catégorie';
             const categorySelect = document.createElement('select'); // Crée une liste déroulante pour les catégories
             categorySelect.name = 'category';
-            categorySelect.placeholder = 'Categories';
+            categoryForm.appendChild(categorySpan);
             categoryForm.appendChild(categorySelect);
 
             const defaultOption = document.createElement('option');
-            defaultOption.text = 'Select a category';
             defaultOption.disabled = true;
             defaultOption.selected = true;
             categorySelect.appendChild(defaultOption);
@@ -360,8 +379,6 @@ function setConnectedMode() {
                     console.error('Error fetching categories:', error);
                 });
 
-
-
             const separator = document.createElement('hr');
             separator.classList.add('hr');
             formContainer.appendChild(separator);
@@ -377,19 +394,22 @@ function setConnectedMode() {
             submitButton.addEventListener('click', function () {
                 const selectedImage = imageInput.files[0]; // Récupère l'image 
                 const title = titleInput.value; // Récupère le titre
+
                 const imageContainer = document.createElement('div');
-                imageContainer.classList.add('gallery-image');
+                imageContainer.classList.add('project-container'); // Utilise la même classe que les autres conteneurs dans la gallerie
 
                 const galleryImage = document.createElement('img');
                 galleryImage.src = URL.createObjectURL(selectedImage);
                 galleryImage.alt = title;
                 imageContainer.appendChild(galleryImage);
 
+                const titleElement = document.createElement('p');
+                titleElement.textContent = title;
+                imageContainer.appendChild(titleElement);
+
                 galleryDiv.appendChild(imageContainer); // Ajoute le conteneur de l'image à la galerie
-
                 addPicModal.style.display = 'none';
-
-                addPicModal.style.display = 'block'; // Affiche la modal pour ajouter une photo
+                document.body.style.backgroundColor = 'white';
             });
 
         })

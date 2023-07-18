@@ -1,5 +1,3 @@
-let userConnected = false;
-
 function getAllCredentials() {
     // Récupère l'email entré par l'utilisateur
     const email = document.getElementById('email').value;

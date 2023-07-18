@@ -448,7 +448,7 @@ li a {
 	transform: translate(-50%, -50%);
 	width: 600px;
 	height: 650px;
-	background-color: #fffef8;
+	background-color: white;
 }
 
 .add-pic-modal .modal-title {
@@ -460,7 +460,7 @@ li a {
 }
 .add-pic-modal .form-container {
 	text-align: center;
-	margin-top: 20%;
+	margin-top: 14%;
 }
 
 .image-form {
@@ -496,21 +496,31 @@ li a {
 	margin-top: 3em;
 }
 
-.title-form, .category-form{
+.title-form, .category-form {
 	margin-top: 2em;
+	display: flex;
+	flex-direction: column;
+}
 
+.title-form span, .category-form span {
+	width: 50%;
+	margin-bottom: 2px;
 }
 
 .title-form input {
 	height: 46px;
 	width: 61%;
 	border: none;
+	box-shadow: 3px 3px 3px 0 rgba(0, 0, 0, 0.09);
+	place-self: center;
 }
 
 .category-form select {
 	height: 46px;
 	width: 61%;
 	border: none;
+	box-shadow: 3px 3px 3px 0 rgba(0, 0, 0, 0.09);
+	place-self: center;
 }
 
 .image-preview {
@@ -531,5 +541,5 @@ li a {
 
 .form-container .hr {
 	width: 85%;
-	margin: 3em;
+	margin: 2em;
 }
