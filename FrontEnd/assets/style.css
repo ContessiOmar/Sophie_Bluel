@@ -290,6 +290,11 @@ footer nav ul {
 	margin: 2em
 }
 
+li a {
+	text-decoration: none;
+	color: black;
+}
+
 /*******/
 
 .filter-buttons {
@@ -309,6 +314,11 @@ footer nav ul {
 	text-align: center;
 	border-radius: 60px;
 	margin: 1px;
+}
+
+.filter-buttons button:active, button:focus {
+	background: #1D6154;
+	color: white;
 }
 
 .icon {
@@ -337,7 +347,7 @@ footer nav ul {
 	border-radius: 10px;
 	width: 600px;
 	height: 730px;
-	background-color: #fffef8;
+	background-color: white;
 }
 
 .modal {
@@ -358,14 +368,16 @@ footer nav ul {
 	transform: translateX(5%);
 }
 .modal .image-container {
-
 	width: 15%;
 }
 
 .image-container img {
-
 	width: 75px;
 	height: 120px;
+}
+
+.image-container p {
+	margin-top: -10px;
 }
 
 .modal .button-container {
@@ -382,7 +394,7 @@ footer nav ul {
 	text-align: center;
 	width: 17px;
 	height: 17px;
-	line-height: 24px;
+	line-height: 20px;
 }
 
 .button-container button {

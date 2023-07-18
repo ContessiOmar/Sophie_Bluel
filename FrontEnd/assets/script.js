@@ -108,6 +108,11 @@ function setConnectedMode() {
     iconDiv.appendChild(iconElement);
     iconDiv.appendChild(iconText);
 
+    const loginLink = document.querySelector("li a[href='login.html']");
+    if (loginLink) {
+        loginLink.textContent = "Logout";
+        loginLink.href = "#";
+    }
 
     const divModal = document.createElement('div');
     divModal.classList.add('modal');
@@ -183,7 +188,7 @@ function setConnectedMode() {
             deleteIconDiv.classList.add('icon');
             const deleteIcon = document.createElement('i');
             deleteIcon.classList.add('fa-solid');
-            deleteIcon.classList.add('fa-trash');
+            deleteIcon.classList.add('fa-trash-can');
             deleteIcon.classList.add('delete-icon');
             modalImage.parentElement.appendChild(deleteIcon);
             //
@@ -224,6 +229,11 @@ function setConnectedMode() {
         modal.appendChild(separator);
 
         modal.style.display = 'flex';
+
+        /**
+         *  MODAL X AJOUT PROJET.
+         */
+        
         // Ouverture de la 2ème modal pour ajouter une photo
         btnAddPic.addEventListener('click', function openAddPicModal() {
             if (openAddPicModal) {
@@ -238,10 +248,8 @@ function setConnectedMode() {
             addPicModal.appendChild(backArrow);
             backArrow.addEventListener('click', function () {
                 addPicModal.remove();
-               // modal.style.display = 'flex';  (?)
+                // modal.style.display = 'flex';  (?)
             });
-           
-
 
             const addPicModalTitle = document.createElement('div');
             addPicModalTitle.classList.add('modal-title');
