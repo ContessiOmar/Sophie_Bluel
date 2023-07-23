@@ -22,6 +22,7 @@ function galleryImages(categoryId) {
                 const img = document.createElement('img');
                 img.src = image.imageUrl;
                 img.alt = image.title;
+                img.dataset.id = image.id;
                 projectContainer.appendChild(img);  // Ajoute les images filtrées à la galerie
 
                 const title = document.createElement('p');
@@ -101,12 +102,10 @@ function createFilterButtons(categories) {
 
 
 
-/**
- * Ici on configure le mode connecté
- */
 let userToken = sessionStorage.getItem('userToken');
 
 function setConnectedMode() {
+    console.log('!!!!!!!!!!!!!' + userToken);
     // Création de l'icône et du conteneur de modal
     const iconDiv = document.createElement('div');
     iconDiv.classList.add('icon');
@@ -213,13 +212,15 @@ function setConnectedMode() {
             // Écouteur d'événement pour la suppression de l'image
             deleteIcon.addEventListener('click', function () {
                 // Requête DELETE à l'API
-                const id = image.getAttribute('data-id');
-
-                fetch(`http://localhost:5678/api/works/${id}`, {
+                const workId = image.dataset.id;
+                console.log('------------->' + workId);
+                fetch(`http://localhost:5678/api/works/${workId}`, {
                     method: 'DELETE',
                     headers: {
 
-                        Authorization: 'Bearer $(data.token)'
+                        "Content-Type": "application/Json",
+                        Authorization: "Bearer " + sessionStorage.getItem("userToken"),
+
                     },
                 })
                     .then((response) => {
@@ -416,8 +417,6 @@ function setConnectedMode() {
     })
 
 }
-
-
 
 
 
