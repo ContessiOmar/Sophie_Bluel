@@ -99,52 +99,51 @@ function createFilterButtons(categories) {
 }
 
 //
-
-
-
 let userToken = sessionStorage.getItem('userToken');
-
 function setConnectedMode() {
     console.log('!!!!!!!!!!!!!' + userToken);
-    // Création de l'icône et du conteneur de modal
-    const iconDiv = document.createElement('div');
-    iconDiv.classList.add('icon');
 
-    const iconElement = document.createElement('i');
-    iconElement.classList.add('fa-solid');
-    iconElement.classList.add('fa-pen-to-square');
-
-    const iconText = document.createElement('p');
-    iconText.textContent = 'modifier';
-    iconDiv.appendChild(iconElement);
-    iconDiv.appendChild(iconText);
+    document.getElementById("blackBar").style.display = "flex";
 
     const loginLink = document.querySelector("li a[href='login.html']");
     if (loginLink) {
         loginLink.textContent = "Logout";
         loginLink.href = "#";
     }
-
-    const divModal = document.createElement('div');
-    divModal.classList.add('modal');
-    divModal.id = 'modal';
+    // Création de l'icône et du conteneur de modal
+    const iconDiv = document.createElement('div');
+    iconDiv.classList.add('icon');
+    const iconElement = document.createElement('i');
+    iconElement.classList.add('fa-solid');
+    iconElement.classList.add('fa-pen-to-square');
+    const iconText = document.createElement('p');
+    iconText.textContent = 'modifier';
     iconDiv.appendChild(iconElement);
-    iconDiv.appendChild(divModal);
+    iconDiv.appendChild(iconText);
+
+    //
+    /*const sectionIntroduction = document.getElementById('introduction');
+    sectionIntroduction.appendChild(iconDiv);*/
+
     // Ajout de l'icône et de la galerie dans la section du portfolio
     const sectionPortfolio = document.getElementById('portfolio');
     sectionPortfolio.appendChild(iconDiv);
     const galleryDiv = document.createElement('div');
     galleryDiv.classList.add('gallery');
     sectionPortfolio.appendChild(galleryDiv);
+    /////////////////////////////////////////////////////////////////////////MODAL
+    const divModal = document.createElement('div');
+    divModal.classList.add('modal');
+    divModal.id = 'modal';
+    iconDiv.appendChild(iconElement);
+    iconDiv.appendChild(divModal);
     // Écouteur d'événement pour l'ouverture de la modal
-    iconElement.addEventListener('click', function () {
+    iconElement.addEventListener('click', function (openModal) {
         const modal = document.createElement('div');
         modal.classList.add('modal');
         modal.id = 'modal';
         document.body.appendChild(modal);
         document.body.style.backgroundColor = 'rgba(0, 0, 0, 0.3)';
-
-
         // Fermeture modal
         const closeIconDiv = document.createElement('div');
         closeIconDiv.classList.add('close-icon');
@@ -180,16 +179,13 @@ function setConnectedMode() {
         buttonContainer.appendChild(btnDltPic);
         modal.appendChild(buttonContainer);
         buttonContainer.classList.add('button-container');
-
         // div pour englober chaque projet dans la modal
         const projectGallery = document.createElement('div');
         projectGallery.classList.add('project-gallery');
-
         // Affichage des images dans  projectGallery
         galleryImages.forEach((image) => {
             const container = document.createElement('div');
             container.classList.add('image-container');
-
             const modalImage = document.createElement('img');
             modalImage.src = image.src;
             modalImage.alt = image.alt;
@@ -206,9 +202,7 @@ function setConnectedMode() {
             const description = document.createElement('p');
             description.textContent = 'éditer';
             modalImage.parentElement.appendChild(description);
-
             projectGallery.appendChild(container);
-
             // Écouteur d'événement pour la suppression de l'image
             deleteIcon.addEventListener('click', function () {
                 // Requête DELETE à l'API
@@ -217,10 +211,8 @@ function setConnectedMode() {
                 fetch(`http://localhost:5678/api/works/${workId}`, {
                     method: 'DELETE',
                     headers: {
-
                         "Content-Type": "application/Json",
                         Authorization: "Bearer " + sessionStorage.getItem("userToken"),
-
                     },
                 })
                     .then((response) => {
@@ -243,17 +235,12 @@ function setConnectedMode() {
         const separator = document.createElement('hr');
         separator.classList.add('hr');
         modal.appendChild(separator);
-
         modal.style.display = 'flex';
-
-        /**
-         *  MODAL X AJOUT PROJET.
-         */
-
+        /////////////////////////////////////////////////////////////////////////MODAL POUR AJOUT D'UN PROJET. 
         // Ouverture de la 2ème modal pour ajouter une photo
         btnAddPic.addEventListener('click', function openAddPicModal() {
             if (openAddPicModal) {
-                modal.remove();
+                modal.style.display = 'none';
             }
             const addPicModal = document.createElement('div');
             addPicModal.classList.add('add-pic-modal');
@@ -264,7 +251,7 @@ function setConnectedMode() {
             addPicModal.appendChild(backArrow);
             backArrow.addEventListener('click', function () {
                 addPicModal.remove();
-                // modal.style.display = 'flex';  (?)
+                modal.style.display = 'flex';
             });
 
             const addPicModalTitle = document.createElement('div');
@@ -273,7 +260,6 @@ function setConnectedMode() {
             heading.textContent = 'Ajout photo';
             addPicModalTitle.appendChild(heading);
             addPicModal.appendChild(addPicModalTitle);
-
             // Fermeture modal
             const closeIconDiv = document.createElement('div');
             closeIconDiv.classList.add('close-icon');
@@ -388,14 +374,9 @@ function setConnectedMode() {
             submitButton.textContent = 'valider';
             formContainer.appendChild(submitButton);
 
-            const galleryDiv = document.createElement('div'); // Crée un conteneur pour la galerie d'images
-            galleryDiv.classList.add('gallery');
-            sectionPortfolio.appendChild(galleryDiv);
-
             submitButton.addEventListener('click', function () {
                 const selectedImage = imageInput.files[0]; // Récupère l'image 
                 const title = titleInput.value; // Récupère le titre
-
                 const imageContainer = document.createElement('div');
                 imageContainer.classList.add('project-container'); // Utilise la même classe que les autres conteneurs dans la gallerie
 
@@ -412,10 +393,8 @@ function setConnectedMode() {
                 addPicModal.style.display = 'none';
                 document.body.style.backgroundColor = 'white';
             });
-
         })
     })
-
 }
 
 
