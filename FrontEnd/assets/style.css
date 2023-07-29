@@ -339,7 +339,7 @@ li a {
 /**MODAL**/
 #modal {
 	position: absolute;
-	top: 50%;
+	top: 76em;
 	left: 50%;
 	transform: translate(-50%, -50%);
 	display: none;
@@ -347,7 +347,7 @@ li a {
 	box-sizing: border-box;
 	border-radius: 10px;
 	width: 600px;
-	height: 745px;
+	height: 845px;
 	background-color: white;
 }
 
@@ -385,7 +385,7 @@ li a {
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
-	transform: translate(1em, 42em);
+	transform: translate(1em, 45em);
 }
 
 .delete-icon {
@@ -444,7 +444,7 @@ li a {
 
 .add-pic-modal {
 	position: absolute;
-	top: 50%;
+	top: 69em;
 	left: 50%;
 	transform: translate(-50%, -50%);
 	width: 600px;

@@ -122,8 +122,9 @@ function setConnectedMode() {
     iconDiv.appendChild(iconText);
 
     //
-    /*const sectionIntroduction = document.getElementById('introduction');
-    sectionIntroduction.appendChild(iconDiv);*/
+    const sectionIntroduction = document.getElementById('introduction');
+    sectionIntroduction.appendChild(iconDiv);
+
 
     // Ajout de l'icône et de la galerie dans la section du portfolio
     const sectionPortfolio = document.getElementById('portfolio');
