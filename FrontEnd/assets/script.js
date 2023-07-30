@@ -98,7 +98,10 @@ function createFilterButtons(categories) {
     });
 }
 
-//
+/**
+ * Ici on va créer la version du site pour l'admin.
+ */
+
 let userToken = sessionStorage.getItem('userToken');
 function setConnectedMode() {
     console.log('!!!!!!!!!!!!!' + userToken);
@@ -109,8 +112,14 @@ function setConnectedMode() {
     if (loginLink) {
         loginLink.textContent = "Logout";
         loginLink.href = "#";
+
+         loginLink.addEventListener("click", function(event) {
+        event.preventDefault(); 
+        sessionStorage.removeItem("userToken");
+        window.location.href = "index.html";
+    });
     }
-    // Création de l'icône et du conteneur de modal
+    /////////////////////////////////////////////////////////////////////////////////// Création de l'icône et du conteneur de modal
     const iconDiv = document.createElement('div');
     iconDiv.classList.add('icon');
     const iconElement = document.createElement('i');
@@ -121,24 +130,29 @@ function setConnectedMode() {
     iconDiv.appendChild(iconElement);
     iconDiv.appendChild(iconText);
 
-    //
-    const sectionIntroduction = document.getElementById('introduction');
-    sectionIntroduction.appendChild(iconDiv);
-
-
-    // Ajout de l'icône et de la galerie dans la section du portfolio
+    /////////////////////////////////////////////////////////////////////////////////// Ajout de l'icône et de la galerie dans la section du portfolio
     const sectionPortfolio = document.getElementById('portfolio');
     sectionPortfolio.appendChild(iconDiv);
     const galleryDiv = document.createElement('div');
     galleryDiv.classList.add('gallery');
     sectionPortfolio.appendChild(galleryDiv);
-    /////////////////////////////////////////////////////////////////////////MODAL
+
+    /////////////////////////////////////////////////////////////////////////////////// Récupération de l'élément "introduction" du HTML
+    const introductionSection = document.getElementById('introduction');
+
+    ////////////////////////////////////////////////////////////////////////////////// Clonage de l'élément "iconDiv" pour le réutiliser dans la section "introduction"
+    const iconDivClone = iconDiv.cloneNode(true);
+
+    /////////////////////////////////////////////////////////////////////////////////// Ajout du clone de l'icône à l'intérieur de la section "introduction"
+    introductionSection.appendChild(iconDivClone);
+
+    ///////////////////////////////// ////////////////////////////////////////////////// MODAL
     const divModal = document.createElement('div');
     divModal.classList.add('modal');
     divModal.id = 'modal';
     iconDiv.appendChild(iconElement);
     iconDiv.appendChild(divModal);
-    // Écouteur d'événement pour l'ouverture de la modal
+    /////////////////////////////////////////////////////////////////////////////////// Écouteur d'événement pour l'ouverture de la modal
     iconElement.addEventListener('click', function (openModal) {
         const modal = document.createElement('div');
         modal.classList.add('modal');
@@ -162,7 +176,7 @@ function setConnectedMode() {
         const buttonContainer = document.createElement('div');
         buttonContainer.classList.add('buttonContainer');
 
-        // Titre de la modal
+        /////////////////////////////////////////////////////////////////////////////////// Titre de la modal
         const modalTitle = document.createElement('div');
         modalTitle.classList.add('modal-title');
         const heading = document.createElement('h3');
@@ -170,20 +184,20 @@ function setConnectedMode() {
         modalTitle.appendChild(heading);
         modal.insertBefore(modalTitle, modal.firstChild);
 
-        // Bouton d'ajout d'une photo
+        ///////////////////////////////////////////////////////////////////////////////////   Bouton d'ajout d'une photo
         const btnAddPic = document.createElement('button');
         btnAddPic.textContent = 'Ajouter une photo';
         buttonContainer.appendChild(btnAddPic);
-        // Bouton x supprimer tout la galerie.
+        //////////////////////////////////////////////////////////////////////////////////    Bouton x supprimer tout la galerie.
         const btnDltPic = document.createElement('button');
         btnDltPic.textContent = 'Supprimer la galerie';
         buttonContainer.appendChild(btnDltPic);
         modal.appendChild(buttonContainer);
         buttonContainer.classList.add('button-container');
-        // div pour englober chaque projet dans la modal
+        ///////////////////////////////////////////////////////////////////////////////////    div pour englober chaque projet dans la modal
         const projectGallery = document.createElement('div');
         projectGallery.classList.add('project-gallery');
-        // Affichage des images dans  projectGallery
+        ////////////////////////////////////////////////////////////////////////////////////   Affichage des images dans  projectGallery
         galleryImages.forEach((image) => {
             const container = document.createElement('div');
             container.classList.add('image-container');
@@ -191,7 +205,7 @@ function setConnectedMode() {
             modalImage.src = image.src;
             modalImage.alt = image.alt;
             container.appendChild(modalImage);
-            // Supprimer une image
+            ///////////////////////////////////////////////////////////////////////////////// Icon pour suppression d'un travail
             const deleteIconDiv = document.createElement('div');
             deleteIconDiv.classList.add('icon');
             const deleteIcon = document.createElement('i');
@@ -204,9 +218,10 @@ function setConnectedMode() {
             description.textContent = 'éditer';
             modalImage.parentElement.appendChild(description);
             projectGallery.appendChild(container);
-            // Écouteur d'événement pour la suppression de l'image
-            deleteIcon.addEventListener('click', function () {
-                // Requête DELETE à l'API
+
+            //////////////////////////////////////////////////////////////////////////////// Écouteur d'événement pour la suppression de l'image
+            deleteIcon.addEventListener('click', function() {
+                ///////////////////////////////////////////////////////////////////////////// Requête DELETE à l'API
                 const workId = image.dataset.id;
                 console.log('------------->' + workId);
                 fetch(`http://localhost:5678/api/works/${workId}`, {
@@ -218,9 +233,15 @@ function setConnectedMode() {
                 })
                     .then((response) => {
                         if (response.ok) {
-                            // Supprimer l'image de la modal
+                            //////////////////////////////////////////////////////////////// Supprimer l'image de la modal
                             modalImage.remove();
                             deleteIcon.remove();
+                            description.remove();
+                            //////////////////////////////////////////////////////////////// Supprimer l'image correspondnt dans la galerie principale.
+                            const galleryImageToRemove = galleryDiv.querySelector(`img[data-id="${workId}"]`);
+                            if (galleryImageToRemove) {
+                                galleryImageToRemove.closest('.project-container').remove();
+                            }
                         } else {
                             console.error('Erreur lors de la requête DELETE');
                         }
@@ -229,16 +250,18 @@ function setConnectedMode() {
                         console.error('Erreur de connexion ou de requête fetch', error);
                     });
             });
+
         });
-        // Ajout du projectGallery à la modal
+        /////////////////////////////////////////////////////////////////////////////// Ajout du projectGallery à la modal
         modal.appendChild(projectGallery);
-        // ligne entre les projets et les boutons
+        ////////////////////////////////////////////////////////////////////////////////ligne entre les projets et les boutons
         const separator = document.createElement('hr');
         separator.classList.add('hr');
         modal.appendChild(separator);
         modal.style.display = 'flex';
-        /////////////////////////////////////////////////////////////////////////MODAL POUR AJOUT D'UN PROJET. 
-        // Ouverture de la 2ème modal pour ajouter une photo
+        ///////////////////////////////////////////////////////////////////////////////MODAL POUR AJOUT D'UN PROJET. 
+
+        ///////////////////////////////////////////////////////////////////////////////Ouverture de la 2ème modal pour ajouter une photo
         btnAddPic.addEventListener('click', function openAddPicModal() {
             if (openAddPicModal) {
                 modal.style.display = 'none';
@@ -261,7 +284,7 @@ function setConnectedMode() {
             heading.textContent = 'Ajout photo';
             addPicModalTitle.appendChild(heading);
             addPicModal.appendChild(addPicModalTitle);
-            // Fermeture modal
+            //////////////////////////////////////////////////////////////////////////////////////// Fermeture modal
             const closeIconDiv = document.createElement('div');
             closeIconDiv.classList.add('close-icon');
             const closeIcon = document.createElement('i');
@@ -277,7 +300,7 @@ function setConnectedMode() {
             const formContainer = document.createElement('div');
             formContainer.classList.add('form-container');
             addPicModal.appendChild(formContainer);
-            // Ici on selectionne l'image
+            ////////////////////////////////////////////////////////////////////////////////////////// Ici on selectionne l'image
             const imageForm = document.createElement('form');
             imageForm.classList.add('image-form');
             formContainer.appendChild(imageForm);
@@ -303,8 +326,8 @@ function setConnectedMode() {
             imageForm.appendChild(imageInput);
 
             imageInput.addEventListener('change', function (event) {
-                const selectedFile = event.target.files[0]; // Récupère le fichier choisi
-                const imagePreview = document.createElement('img'); // Crée une preview de l'image
+                const selectedFile = event.target.files[0]; /////////////////////////////////////////// Récupère le fichier choisi
+                const imagePreview = document.createElement('img'); /////////////////////////////////// Crée une preview de l'image
                 imagePreview.src = URL.createObjectURL(selectedFile);
                 imagePreview.alt = 'Preview';
                 imagePreview.classList.add('image-preview');
@@ -312,34 +335,34 @@ function setConnectedMode() {
             });
 
             imageForm.addEventListener('submit', function (event) {
-                event.preventDefault(); // Empêche le formulaire de se soumettre
+                event.preventDefault(); //////////////////////////////////////////////////////////////// Empêche le formulaire de se soumettre
             });
 
 
             addButton.addEventListener('click', function () {
                 imageInput.click();
             });
-            // Ici on ajoute un titre pour le nouveau fichier!!
+            ///////////////////////////////////////////////////////////////////////////////////////////// Ici on ajoute un titre pour le nouveau fichier!!
             const titleForm = document.createElement('form');
             titleForm.classList.add('title-form');
             formContainer.appendChild(titleForm);
 
             const titleSpan = document.createElement('span');
             titleSpan.textContent = 'Titre';
-            const titleInput = document.createElement('input'); // Crée un champ de saisie
+            const titleInput = document.createElement('input');  ///////////////////////////////////////// Crée un champ de saisie
             titleInput.type = 'text';
             titleInput.name = 'title';
 
             titleForm.appendChild(titleSpan);
             titleForm.appendChild(titleInput);
-            // Ici on pourra donner une categorie
+            ///////////////////////////////////////////////////////////////////////////////////////////// Ici on pourra donner une categorie
             const categoryForm = document.createElement('form');
             categoryForm.classList.add('category-form');
             formContainer.appendChild(categoryForm);
 
             const categorySpan = document.createElement('span');
             categorySpan.textContent = 'Catégorie';
-            const categorySelect = document.createElement('select'); // Crée une liste déroulante pour les catégories
+            const categorySelect = document.createElement('select'); ////////////////////////////////////// Crée une liste déroulante pour les catégories
             categorySelect.name = 'category';
             categoryForm.appendChild(categorySpan);
             categoryForm.appendChild(categorySelect);
@@ -357,7 +380,7 @@ function setConnectedMode() {
                 .then(response => response.json())
                 .then(data => {
                     data.forEach(categoryObj => {
-                        const option = document.createElement('option'); // Crée une option pour chaque catégorie
+                        const option = document.createElement('option'); /////////////////////////////////// Crée une option pour chaque catégorie
                         option.value = categoryObj.name;
                         option.text = categoryObj.name;
                         categorySelect.appendChild(option);
@@ -375,28 +398,52 @@ function setConnectedMode() {
             submitButton.textContent = 'valider';
             formContainer.appendChild(submitButton);
 
-            submitButton.addEventListener('click', function () {
-                const selectedImage = imageInput.files[0]; // Récupère l'image 
-                const title = titleInput.value; // Récupère le titre
-                const imageContainer = document.createElement('div');
-                imageContainer.classList.add('project-container'); // Utilise la même classe que les autres conteneurs dans la gallerie
+            submitButton.addEventListener('click', function() {
+                const selectedImage = imageInput.files[0];  //////////////////////////////////////////////// Récupère l'image sélectionnée
+                const title = titleInput.value;
+                 /////////////////////////////////////////////////////////////////////////////////////////// Crée un objet FormData pour envoyer les données en multipart/form-data
+                const formData = new FormData();
+                formData.append('title', title);
+                formData.append('category', 1);
+                formData.append('image', selectedImage);
 
-                const galleryImage = document.createElement('img');
-                galleryImage.src = URL.createObjectURL(selectedImage);
-                galleryImage.alt = title;
-                imageContainer.appendChild(galleryImage);
+                /////////////////////////////////////////////////////////////////////////////////////////// requête Fetch vers l'API pour envoyer l'image depuis l'ordinateur
+                fetch('http://localhost:5678/api/works', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': 'Bearer ' + sessionStorage.getItem('userToken'), ////////////////// 
+                    },
+                    body: formData,
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        //////////////////////////////////////////////////////////////////////////////////  ajoute du nouveau travail dans la galerie.
+                       const imageContainer = document.createElement('div');
+                        imageContainer.classList.add('project-container');
 
-                const titleElement = document.createElement('p');
-                titleElement.textContent = title;
-                imageContainer.appendChild(titleElement);
+                        const galleryImage = document.createElement('img');
+                        galleryImage.src = URL.createObjectURL(selectedImage);
+                        galleryImage.alt = title;
+                        imageContainer.appendChild(galleryImage);
 
-                galleryDiv.appendChild(imageContainer); // Ajoute le conteneur de l'image à la galerie
-                addPicModal.style.display = 'none';
-                document.body.style.backgroundColor = 'white';
+                        const titleElement = document.createElement('p');
+                        titleElement.textContent = title;
+                        imageContainer.appendChild(titleElement);
+
+                        galleryDiv.appendChild(imageContainer);
+                        addPicModal.style.display = 'none';
+                        document.body.style.backgroundColor = 'white';
+                    })
+                    .catch(error => {
+                        console.error('Erreur lors de la requête vers l API :', error);
+                    });
             });
-        })
+
+        });
+
     })
 }
+
 
 
 
