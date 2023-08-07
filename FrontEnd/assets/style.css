@@ -301,7 +301,7 @@ li a {
 #introduction .icon {
 	flex-direction: row;
 	justify-content: space-evenly;
-	transform: translate(-52em, 10em);
+	transform: translate(-51.6em, 10em);
 }
 
 /*******/
@@ -332,15 +332,24 @@ li a {
 
 .icon {
 	display: flex;
-	flex-direction: column-reverse;
 	font-size: 20px;
-	transform: translate(36em, -3em);
+	transform: translate(34em, -59px);
+}
+
+.icon i {
+	font-weight: 500;
+	order: 1;
+	margin-right: 3%;
+	font-size: 21px;
+	line-height: 25px;
 }
 
 .icon p {
 	width: 7%;
 	margin-left: -21px;
 	margin-top: 5px;
+	order: 2;
+	font-size: 20px;
 }
 
 
