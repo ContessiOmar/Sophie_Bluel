@@ -452,8 +452,8 @@ li a {
 
   .close-icon {
 	position: absolute;
-	top: 10px;
-	right: 10px;
+	top: 25px;
+	right: 30px;
 	font-size: 22px;
   }
 
@@ -475,6 +475,11 @@ li a {
 
 .add-pic-modal i {
 	font-size: 22px;
+	transform: translate(20px, 28px);
+}
+
+.add-pic-modal .close-icon {
+	transform: translate(-35px, -20px);
 }
 .add-pic-modal .form-container {
 	text-align: center;
@@ -512,6 +517,7 @@ li a {
 	border-radius: 20px;
 	background: #CBD6DC;
 	margin-top: 3em;
+	color: #306685;
 }
 
 .title-form, .category-form {
