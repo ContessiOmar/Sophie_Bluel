@@ -509,6 +509,7 @@ li a {
 .input-container i {
 	color: #CBD6DC;
 	font-size: 5em;
+	transform: translateY(9px);
 }
 
 .input-container .add-photo-button {
@@ -518,6 +519,7 @@ li a {
 	background: #CBD6DC;
 	margin-top: 3em;
 	color: #306685;
+	border: none;
 }
 
 .title-form, .category-form {
