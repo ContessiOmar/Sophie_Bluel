@@ -1,3 +1,13 @@
+nav ul li:nth-child(3) {
+    font-weight: 900;
+}
+
+body {
+    background: #FFFEF8;
+    margin: 0;
+    transform: translateX(10em);
+}
+
 section {
     display: flex;
     flex-direction: column;
@@ -6,7 +16,48 @@ section {
     margin-bottom: 17%;
 }
 
-form {
+section h2 {
+    margin-bottom: 1em;
+}
+
+.form {
     display: flex;
     flex-direction: column;
+    gap: 4px;
+    margin-left: 18px;
+}
+
+.form label {
+    margin-top: 12px;
+}
+
+.form input {
+    width: 21em;
+    height: 33px;
+    border: none;
+    box-shadow: 3px 3px 3px 0 rgba(0, 0, 0, 0.09);
+}
+
+.form button {
+    width: 11em;
+    height: 30px;
+    margin-top: 12px;
+    align-self: center;
+    border-radius: 20px;
+    background: #1D6154;
+    color: white;
+    border: none;
+}
+
+.form .forgot-password {
+    align-self: center;
+    margin-top: 20px;
+    color: black;
+}
+
+footer {
+    height: 9em;
+    width: 104em;
+    transform: translateX(-12em);
+    background: white;
 }
