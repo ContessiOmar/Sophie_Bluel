@@ -113,11 +113,11 @@ function setConnectedMode() {
         loginLink.textContent = "Logout";
         loginLink.href = "#";
 
-         loginLink.addEventListener("click", function(event) {
-        event.preventDefault(); 
-        sessionStorage.removeItem("userToken");
-        window.location.href = "index.html";
-    });
+        loginLink.addEventListener("click", function (event) {
+            event.preventDefault();
+            sessionStorage.removeItem("userToken");
+            window.location.href = "index.html";
+        });
     }
     /////////////////////////////////////////////////////////////////////////////////// Création de l'icône et du conteneur de modal
     const iconDiv = document.createElement('div');
@@ -220,7 +220,7 @@ function setConnectedMode() {
             projectGallery.appendChild(container);
 
             //////////////////////////////////////////////////////////////////////////////// Écouteur d'événement pour la suppression de l'image
-            deleteIcon.addEventListener('click', function() {
+            deleteIcon.addEventListener('click', function () {
                 ///////////////////////////////////////////////////////////////////////////// Requête DELETE à l'API
                 const workId = image.dataset.id;
                 console.log('------------->' + workId);
@@ -398,10 +398,18 @@ function setConnectedMode() {
             submitButton.textContent = 'valider';
             formContainer.appendChild(submitButton);
 
-            submitButton.addEventListener('click', function() {
-                const selectedImage = imageInput.files[0];  //////////////////////////////////////////////// Récupère l'image sélectionnée
+            submitButton.addEventListener('click', function () {
+            
+                const selectedImage = imageInput.files[0];
                 const title = titleInput.value;
-                 /////////////////////////////////////////////////////////////////////////////////////////// Crée un objet FormData pour envoyer les données en multipart/form-data
+                const selectedCategoryText = categorySelect.options[categorySelect.selectedIndex].text;
+
+                // On verifie si le formulaire à etait remplie. 
+                if (!selectedImage || !title || !selectedCategoryText) {
+                    alert('Veuillez remplir le formulaire');
+                    return false;
+                }
+                /////////////////////////////////////////////////////////////////////////////////////////// Crée un objet FormData pour envoyer les données en multipart/form-data
                 const formData = new FormData();
                 formData.append('title', title);
                 formData.append('category', 1);
@@ -418,7 +426,7 @@ function setConnectedMode() {
                     .then(response => response.json())
                     .then(data => {
                         //////////////////////////////////////////////////////////////////////////////////  ajoute du nouveau travail dans la galerie.
-                       const imageContainer = document.createElement('div');
+                        const imageContainer = document.createElement('div');
                         imageContainer.classList.add('project-container');
 
                         const galleryImage = document.createElement('img');
@@ -435,6 +443,7 @@ function setConnectedMode() {
                         document.body.style.backgroundColor = 'white';
                     })
                     .catch(error => {
+                        alert('Erreur lors de l envoi du formulaire. Veuillez réessayer.');
                         console.error('Erreur lors de la requête vers l API :', error);
                     });
             });
