@@ -6,6 +6,8 @@ function getAllCredentials() {
     // Récupère le mot de passe
     const password = document.getElementById('password').value;
 
+    
+
     // Effectue une requête POST vers le lien de l'Api
     fetch('http://localhost:5678/api/users/login', {
         method: 'POST',
@@ -39,24 +41,6 @@ const emailInput = document.getElementById('email');
 const passwordInput = document.getElementById('password');
 const submitButton = document.querySelector('.form button');
 
-// Fonction pour vérifier la validité du formulaire
-function checkFormValidity() {
-    const emailValue = emailInput.value.trim();
-    const passwordValue = passwordInput.value.trim();
-
-    if (emailValue !== '' && passwordValue !== '') {
-        // Activer le bouton de soumission si les champs sont remplis
-        submitButton.removeAttribute('disabled');
-    } else {
-        // Désactiver le bouton de soumission si les champs ne sont pas remplis
-        submitButton.setAttribute('disabled', 'disabled');
-    }
-}
-
-// Écouteurs d'événements pour vérifier la validité du formulaire lors de la saisie dans les champs
-emailInput.addEventListener('input', checkFormValidity);
-passwordInput.addEventListener('input', checkFormValidity);
-
 // Écouteur d'événement pour gérer l'envoi du formulaire lors du clic sur le bouton
 submitButton.addEventListener('click', function(event) {
     event.preventDefault();
@@ -71,3 +55,5 @@ submitButton.addEventListener('click', function(event) {
         alert('Veuillez remplir tous les champs du formulaire.');
     }
 });
+
+

@@ -399,54 +399,58 @@ function setConnectedMode() {
             formContainer.appendChild(submitButton);
 
             submitButton.addEventListener('click', function () {
-            
+
                 const selectedImage = imageInput.files[0];
                 const title = titleInput.value;
                 const selectedCategoryText = categorySelect.options;
 
                 // On verifie si le formulaire à etait remplie. 
                 if (!selectedImage || !title || !selectedCategoryText) {
-                    alert('Veuillez remplir le formulaire');
-                    return false;
-                }
-                /////////////////////////////////////////////////////////////////////////////////////////// Crée un objet FormData pour envoyer les données en multipart/form-data
-                const formData = new FormData();
-                formData.append('title', title);
-                formData.append('category', 1);
-                formData.append('image', selectedImage);
+                    alert('Veuillez remplir le formulaire 2');
 
-                /////////////////////////////////////////////////////////////////////////////////////////// requête Fetch vers l'API pour envoyer l'image depuis l'ordinateur
-                fetch('http://localhost:5678/api/works', {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': 'Bearer ' + sessionStorage.getItem('userToken'), ////////////////// 
-                    },
-                    body: formData,
-                })
-                    .then(response => response.json())
-                    .then(data => {
-                        //////////////////////////////////////////////////////////////////////////////////  ajoute du nouveau travail dans la galerie.
-                        const imageContainer = document.createElement('div');
-                        imageContainer.classList.add('project-container');
+                } else {
 
-                        const galleryImage = document.createElement('img');
-                        galleryImage.src = URL.createObjectURL(selectedImage);
-                        galleryImage.alt = title;
-                        imageContainer.appendChild(galleryImage);
 
-                        const titleElement = document.createElement('p');
-                        titleElement.textContent = title;
-                        imageContainer.appendChild(titleElement);
+                    /////////////////////////////////////////////////////////////////////////////////////////// Crée un objet FormData pour envoyer les données en multipart/form-data
+                    const formData = new FormData();
+                    formData.append('title', title);
+                    formData.append('category', 1);
+                    formData.append('image', selectedImage);
 
-                        galleryDiv.appendChild(imageContainer);
-                        addPicModal.style.display = 'none';
-                        document.body.style.backgroundColor = 'white';
+                    /////////////////////////////////////////////////////////////////////////////////////////// requête Fetch vers l'API pour envoyer l'image depuis l'ordinateur
+                    fetch('http://localhost:5678/api/works', {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': 'Bearer ' + sessionStorage.getItem('userToken'), ////////////////// 
+                        },
+                        body: formData,
                     })
-                    .catch(error => {
-                        alert('Erreur lors de l envoi du formulaire. Veuillez réessayer.');
-                        console.error('Erreur lors de la requête vers l API :', error);
-                    });
+                        .then(response => response.json())
+                        .then(data => {
+                            //////////////////////////////////////////////////////////////////////////////////  ajoute du nouveau travail dans la galerie.
+                            const imageContainer = document.createElement('div');
+                            imageContainer.classList.add('project-container');
+
+                            const galleryImage = document.createElement('img');
+                            galleryImage.src = URL.createObjectURL(selectedImage);
+                            galleryImage.alt = title;
+                            imageContainer.appendChild(galleryImage);
+
+                            const titleElement = document.createElement('p');
+                            titleElement.textContent = title;
+                            imageContainer.appendChild(titleElement);
+
+                            galleryDiv.appendChild(imageContainer);
+                            addPicModal.style.display = 'none';
+                            document.body.style.backgroundColor = 'white';
+                        })
+                        .catch(error => {
+                            alert('Erreur lors de l envoi du formulaire. Veuillez réessayer.');
+                            console.error('Erreur lors de la requête vers l API :', error);
+                        });
+                }
             });
+
 
         });
 
