@@ -402,7 +402,7 @@ function setConnectedMode() {
             
                 const selectedImage = imageInput.files[0];
                 const title = titleInput.value;
-                const selectedCategoryText = categorySelect.options[categorySelect.selectedIndex].text;
+                const selectedCategoryText = categorySelect.options;
 
                 // On verifie si le formulaire à etait remplie. 
                 if (!selectedImage || !title || !selectedCategoryText) {
