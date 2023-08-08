@@ -563,6 +563,9 @@ li a {
 	border-radius: 20px;
 	width: 30%;
 	height: 30px;
+	border: none;
+	background: #1D6154;
+	color: white;
 }
 
 .form-container .hr {
